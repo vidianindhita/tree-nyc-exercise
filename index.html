@@ -1,0 +1,97 @@
+<!-- Documentation: https://www.mapbox.com/mapbox-gl-js/style-spec/#sources-geojson -->
+<!-- Mapbox styles: https://github.com/mapbox/mapbox-gl-styles -->
+<!-- Earthquake data: https://earthquake.usgs.gov/ -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    html,
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    </style>
+    <title> Earthquakes on January 30, 2018 </title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+
+<body>
+    <div id="map"> </div>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmlkaWFuaW5kaGl0YSIsImEiOiJjamY3bmt6cnIyYnloMzNwZHZkaHBza2FnIn0.THRLsGN25R47_kIIcz7YGA';
+
+    var map = new mapboxgl.Map({
+        container: 'map', // you need this
+        style: 'mapbox://styles/mapbox/dark-v9', // you also need this 
+        center: [-74.0006213, 40.7229971], // [long, lat] Different than leaflet, different than google maps, same as geojson! 
+        zoom: 12
+    });
+
+
+    // Source is where the data is coming from, layer is what you're going to do with it.
+    map.on('load', function() {
+        map.addSource('trees', { // this is just what we're calling the data set
+            type: 'geojson',
+            data: '/data/tree.geojson'
+        });
+        map.addLayer({
+            'id' : 'trees',
+            'type' : 'circle',
+            'source' : 'trees',
+            'paint' : {
+                'circle-radius' : {
+                // make the circles larger as the user zoom from 12 to 22
+                'base' : 5,
+                'stops' : [[12,2], [22,10]]
+                },
+                'circle-color' : {
+                    'property' : 'spc_common',
+                    'type' : 'categorical',
+                    'stops' : [
+                        ['American elm', '#ffffff'],
+                        ['American linden', '#4B7EF2'],
+                        ['Amur maple', '#F24B4B'],
+                        ['ash', '#6EDD77'],
+                        ['Atlantic white cedar', '#F0EF81'],
+                        ['black cherry', '#F4AA61'],
+                        ['Callery pear', '#454545'],
+                        ['crab apple', '#F09981'],
+                        ['ginkgo', '#f0ff00'],
+                        ['honeylocust', '#4BEEF2'],
+                        ['Japanese zelkova', '#6FDD00'],
+                        ['london planetree', '#50ff88'],
+                        ['Norway maple', '#44dd00'],
+                        ['pin oak', '#F0ff81'],
+                        ['red maple', '#F24BBB'],
+                        ['scarlet oak', '#f0ffff'],
+                        ['silver linden', '#F49961'],
+                        ['Sophora', '#6Eff77'],
+                        ['swamp white oak', '#123456'],
+                        ['sweetgum', '#654321'],
+                        ['tulip-poplar', '#555444'],
+                        ['white oak', '#223344'],
+                        ['willow oak', '#11ff99']
+
+                    ]
+                    
+                },
+                // 'circle-color' : '#ffffff'
+            },
+            
+        })
+    });
+    </script>
+</body>
+
+</html>
